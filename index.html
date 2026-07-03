@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Nicaplus Gaming - Próximamente</title>
     <style>
         * {
@@ -11,20 +11,37 @@
             padding: 0;
         }
 
+        /* Evita scroll a nivel global y fuerza el tamaño de la pantalla móvil (dvh) */
+        html, body {
+            width: 100%;
+            height: 100dvh;
+            overflow: hidden;
+            background-color: #060409;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #060409;
             color: #FFFFFF;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             text-align: center;
-            overflow: hidden;
             position: relative;
         }
 
-        /* FONDO 1: Cuadrícula con perspectiva Gaming / Cyberpunk */
+        /* Contenedor aislado para los fondos animados para evitar que empujen el scroll */
+        .background-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* FONDO 1: Cuadrícula con perspectiva Gaming */
         .bg-grid {
             position: absolute;
             top: 0;
@@ -36,125 +53,126 @@
                 linear-gradient(90deg, rgba(88, 28, 126, 0.08) 1px, transparent 1px);
             background-size: 40px 40px;
             background-position: center center;
-            z-index: 1;
         }
 
-        /* FONDO 2: Luces difuminadas de neón en constante movimiento */
+        /* FONDO 2: Luces difuminadas de neón */
         .bg-glows {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 2;
         }
 
         .glow-1, .glow-2 {
             position: absolute;
             border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.4;
+            filter: blur(80px); /* Reducido levemente para mejorar rendimiento en tablets/celulares */
+            opacity: 0.35;
             animation: floatGlow 8s infinite alternate ease-in-out;
         }
 
         .glow-1 {
-            width: 400px;
-            height: 400px;
+            width: 300px;
+            height: 300px;
             background: #b002c2;
-            top: -10%;
-            left: -10%;
+            top: -5%;
+            left: -5%;
         }
 
         .glow-2 {
-            width: 500px;
-            height: 500px;
+            width: 350px;
+            height: 350px;
             background: #047688;
-            bottom: -15%;
-            right: -10%;
+            bottom: -5%;
+            right: -5%;
             animation-delay: -4s;
         }
 
         @keyframes floatGlow {
             0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(80px, 50px) scale(1.2); }
+            100% { transform: translate(40px, 30px) scale(1.1); }
         }
 
         /* FONDO 3: Aura principal detrás de la tarjeta */
         .main-pulse {
             position: absolute;
-            width: 450px;
+            width: 100%;
+            max-width: 450px;
             height: 450px;
-            background: radial-gradient(circle, rgba(176, 2, 194, 0.25) 0%, rgba(4, 118, 136, 0.05) 50%, transparent 70%);
+            background: radial-gradient(circle, rgba(176, 2, 194, 0.22) 0%, rgba(4, 118, 136, 0.04) 50%, transparent 70%);
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 3;
             animation: radicalPulse 4s infinite ease-in-out;
         }
 
         @keyframes radicalPulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
-            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+            0%, 100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.8; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
         }
 
-        /* Tarjeta principal con mejor contraste y bordes de neón */
+        /* Tarjeta principal - Optimizada para no desbordar en pantallas pequeñas */
         .container {
-            background: rgba(13, 10, 18, 0.75);
+            background: rgba(13, 10, 18, 0.82);
             border: 1px solid rgba(176, 2, 194, 0.25);
             border-radius: 24px;
-            padding: 45px 35px;
-            max-width: 480px;
-            width: 90%;
+            padding: 35px 25px;
+            max-width: 440px;
+            width: 88%;
+            max-height: 90dvh; /* Evita que la tarjeta sea más alta que la pantalla del celular */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), 
                         0 0 40px rgba(176, 2, 194, 0.1);
-            z-index: 4;
-            animation: initCard 1s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 5;
+            animation: initCard 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes initCard {
-            from { opacity: 0; transform: translateY(40px) scale(0.95); }
+            from { opacity: 0; transform: translateY(20px) scale(0.97); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        /* Wrapper del Logo de la imagen `image_082ffe.png` */
+        /* Wrapper del Logo */
         .logo-wrapper {
             background-color: #FFFFFF;
-            padding: 22px;
+            padding: 15px 20px;
             border-radius: 18px;
             display: inline-block;
-            margin-bottom: 35px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4),
-                        0 0 20px rgba(255, 255, 255, 0.1);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 25px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease;
         }
 
         .logo-wrapper:hover {
-            transform: scale(1.05) rotate(1deg);
+            transform: scale(1.03);
         }
 
         .logo-img {
             max-width: 100%;
             height: auto;
             display: block;
-            max-height: 140px;
+            max-height: 110px; /* Tamaño controlado para pantallas móviles */
         }
 
         h1 {
             color: #FFFFFF;
-            font-size: 2rem;
+            font-size: 1.75rem;
             font-weight: 800;
             letter-spacing: 2px;
-            margin-bottom: 12px;
+            margin-bottom: 5px;
             text-transform: uppercase;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
         .divider {
             height: 3px;
-            width: 80px;
-            margin: 22px auto;
+            width: 70px;
+            margin: 15px auto;
             background: linear-gradient(90deg, #581c7e, #b002c2, #047688);
             border-radius: 10px;
             position: relative;
@@ -179,47 +197,49 @@
 
         p {
             color: #c4c1ca;
-            font-size: 1.05rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
             font-weight: 400;
+            max-width: 360px;
         }
 
         .badge {
             display: inline-block;
-            padding: 8px 20px;
+            padding: 6px 18px;
             background-color: rgba(4, 118, 136, 0.1);
             border: 1px solid #047688;
             color: #047688;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2px;
             border-radius: 50px;
-            box-shadow: 0 0 15px rgba(4, 118, 136, 0.2);
+            box-shadow: 0 0 15px rgba(4, 118, 136, 0.15);
             animation: pulseBadge 1.5s infinite alternate ease-in-out;
         }
 
         @keyframes pulseBadge {
-            from { transform: scale(1); box-shadow: 0 0 10px rgba(4, 118, 136, 0.2); }
-            to { transform: scale(1.03); box-shadow: 0 0 20px rgba(4, 118, 136, 0.6); }
+            from { transform: scale(1); }
+            to { transform: scale(1.02); box-shadow: 0 0 15px rgba(4, 118, 136, 0.4); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Capas de diseño para el fondo vivo -->
-    <div class="bg-grid"></div>
-    <div class="bg-glows">
-        <div class="glow-1"></div>
-        <div class="glow-2"></div>
+    <!-- Contenedor aislado de fondos -->
+    <div class="background-wrapper">
+        <div class="bg-grid"></div>
+        <div class="bg-glows">
+            <div class="glow-1"></div>
+            <div class="glow-2"></div>
+        </div>
+        <div class="main-pulse"></div>
     </div>
-    <div class="main-pulse"></div>
 
-    <!-- Contenedor de Información -->
+    <!-- Contenedor de Información Estricto -->
     <div class="container">
         <div class="logo-wrapper">
-            <!-- Renderiza tu archivo image_082b85.png aquí -->
             <img src="logo.png" alt="Nicaplus Gaming" class="logo-img">
         </div>
 
